@@ -108,7 +108,7 @@ FROM hoogle as Customize
 RUN sed -i '$a\url-source:\n    OwnSource: https://mirrors.ustc.edu.cn/ghcup/ghcup-metadata/ghcup-0.0.7.yaml' ~/.ghcup/config.yaml
 
 # 修改 ~/.cabal/config
-RUN sed -i '/repository/s/hackage.haskell.org/mirrors.ustc.edu.cn/' ~/.cabal/config &&  sed -i '/url: /s/http:\/\/hackage.haskell.org\//https:\/\/mirrors.ustc.edu.cn\/hackage\//' ~/.cabal/config && sed -i '/secure/s/-- secure: True/secure: True/' ~/.cabal/config && head -n 20 ~/.cabal/config && cabal update
+RUN sed -i '/repository/s/hackage.haskell.org/mirrors.ustc.edu.cn/' ~/.cabal/config &&  sed -i '/url: /s/http:\/\/hackage.haskell.org\//https:\/\/mirrors.ustc.edu.cn\/hackage\//' ~/.cabal/config && sed -i '/secure/s/-- secure: True/secure: True/' ~/.cabal/config && head -n 20 ~/.cabal/config
 
 # Stackage 镜像
 RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
