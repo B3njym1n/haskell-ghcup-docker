@@ -7,7 +7,6 @@ ARG STACK_VERSION=recommended
 ARG STACK_RESOLVER=nightly
 ARG CABAL_VERSION=recommended
 ARG HLS_VERSION=recommended
-ARG LLVM_VERSION=17
 
 ENV USERNAME=vscode \
     USER_UID=1000 \
@@ -17,21 +16,15 @@ ENV USERNAME=vscode \
     STACK_VERSION=${STACK_VERSION} \
     STACK_RESOLVER=${STACK_RESOLVER} \
     CABAL_VERSION=${CABAL_VERSION} \
-    HLS_VERSION=${HLS_VERSION} \
-    LLVM_VERSION=${LLVM_VERSION}
+    HLS_VERSION=${HLS_VERSION} 
 
 RUN ulimit -n 8192
 
 RUN VERSION_CODENAME=$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2) && \
     apt-get update && \
     apt-get install -y --no-install-recommends software-properties-common wget && \
-    # I don't know why, nor do I have any mental capacity to figure it out,
-    # but we need to add the repository twice, otherwise it doesn't work (repo isn't being added)
-    add-apt-repository -y -s -n "deb http://apt.llvm.org/${VERSION_CODENAME}/ llvm-toolchain-${VERSION_CODENAME}-${LLVM_VERSION} main" && \
-    add-apt-repository -y -s -n "deb http://apt.llvm.org/${VERSION_CODENAME}/ llvm-toolchain-${VERSION_CODENAME}-${LLVM_VERSION} main" && \
-    wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc && \
     apt-get update && \
-    apt-get install -y --no-install-recommends apt-utils bash build-essential ca-certificates curl gcc git gnupg libffi-dev libffi8 libgmp-dev libgmp-dev libgmp10 libicu-dev libncurses-dev libncurses5 libnuma1 libnuma-dev libtinfo5 lsb-release make procps sudo xz-utils z3 zlib1g-dev clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
+    apt-get install -y --no-install-recommends apt-utils bash build-essential ca-certificates curl gcc git gnupg libffi-dev libffi8 libgmp-dev libgmp-dev libgmp10 libicu-dev libncurses-dev libncurses5 libnuma1 libnuma-dev libtinfo5 lsb-release make procps sudo xz-utils z3 zlib1g-dev
 
 RUN groupadd --gid ${USER_GID} ${USERNAME} && \
     useradd -ms /bin/bash -K MAIL_DIR=/dev/null --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME} && \
